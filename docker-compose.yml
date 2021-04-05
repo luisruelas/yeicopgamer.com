@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+   db:
+     container_name: yeicopgamming_db
+     image: mysql:5.7
+     volumes:
+       - ./mysql:/var/lib/mysql
+     environment:
+       MYSQL_ROOT_PASSWORD: 123456789
+       MYSQL_DATABASE: appyeicopgamming
+       MYSQL_USER: luis
+       MYSQL_PASSWORD: 123456789
+
+   wordpress:
+     depends_on:
+       - db
+     image: wordpress:latest
+     container_name : yeicopgamming
+     volumes:
+      - ./html:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+     ports:
+       - "1246:80"
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: luis
+       WORDPRESS_DB_PASSWORD: 123456789
+       WORDPRESS_DB_NAME: appyeicopgamming
+volumes:
+    db_data: {}

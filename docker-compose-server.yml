@@ -1,0 +1,37 @@
+version: '3.5'
+networks:
+  proxynet:
+    external: true
+services:
+  enarm-app:
+    image: laravel_npm
+    container_name: enarm_curso_app
+    expose:
+      - 80
+    environment:
+      - APACHE_RUN_USER=#1000
+      - APACHE_RUN_GROUP=#1000
+      - VIRTUAL_HOST=reinoenarm.com,www.reinoenarm.com
+      - LETSENCRYPT_HOST=reinoenarm.com,www.reinoenarm.com
+      - LETSENCRYPT_EMAIL=luise.ruelasz@gmail.com
+    volumes:
+      - ./html/enarm_curso:/var/www/html
+      - ./apache2:/etc/apache2
+    networks:
+      - proxynet
+
+  enarm-db:
+    image: mysql:5.7
+    container_name: enarm_curso_db
+    ports:
+      - 3336:3306
+    volumes:
+      - ./mysql_home:/root/
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=Dragion12DB
+      - MYSQL_DATABASE=appenarm
+      - MYSQL_USER=luis
+      - MYSQL_PASSWORD=123465
+    networks:
+      - proxynet
